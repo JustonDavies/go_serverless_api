@@ -9,7 +9,7 @@ The code in the this project enables users:
   - Simple command line scripts to test the API
   - Create/Read/Update/Delete/List Tasks  
   
-NOTE: No code generation or templates were leveraged in this project. All ~10,000 lines were entered by hand to help demonstrate in depth knowledge of each moving part of this application stack.  
+NOTE: No code generation or templates were leveraged in this project. All ~6,000 lines were entered by hand to help demonstrate in depth knowledge of each moving part of this application stack.  
 
 Development
 ===========
@@ -55,7 +55,7 @@ The project is follows the established paradigms in [golang standards project-la
 
 Build
 ===========
-To build binaries for all supported supported endpoints:
+To build binaries for all supported endpoints:
 
 ```
     $ scripts/build.sh
@@ -63,14 +63,14 @@ To build binaries for all supported supported endpoints:
 
 Provision
 ===========
-To build out managed infrastructure for all supported supported endpoints: (NOTE: This will be rolled into a docker script later)
+To build out managed infrastructure for all supported endpoints: (NOTE: This will be rolled into a docker script later)
 
 ```
     $ terraform init
     $ terraform apply -var-file='configs/secrets/production.tfvars'
 ```
 
-The following `best practices` are also highly reccommended:
+The following `best practices` are also highly recommended:
  
  - Terraform Workspaces: Take advantage of `workspaces` in to support multiple stages / environments by running the following before getting started
 
@@ -143,14 +143,14 @@ This application can be tested provided you have:
   - An available instance of Postgres 11.1 available with a valid connection string in the environment variables
   - Environment variables which adhere to the following:    
     ```
-      DATABASE_CONNECTION_PARAMETERS	postgres://task_service_user:task_service_password@127.0.0.1/task_service_database?sslmode=disable&timezone=UTC
-      DATABASE_MIGRATION_PATH	file://migrations
-      ENVIRONMENT	test
+      DATABASE_CONNECTION_PARAMETERS=postgres://task_service_user:task_service_password@127.0.0.1/task_service_database?sslmode=disable&timezone=UTC
+      DATABASE_MIGRATION_PATH=file://migrations
+      ENVIRONMENT=test
     ```
   - You can run `go test` on the directory on one file/package at a time  
 
 ### Endpoints
-This application has just one HTTPS endpoint
+This application has just one set of HTTPS endpoints
 
 `POST /tasks`
   - Parameters:
