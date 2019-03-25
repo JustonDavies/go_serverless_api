@@ -1,0 +1,101 @@
+#-- Service ------------------------------------------------------------------------------------------------------------
+service: go-serverless-api
+
+#-- Package ------------------------------------------------------------------------------------------------------------
+package:
+  individually: true
+  exclude:
+  - ./**
+
+#-- Plugins ------------------------------------------------------------------------------------------------------------
+
+#-- Custom / Secrets ---------------------------------------------------------------------------------------------------
+custom:
+  secrets: ${file(configs/secrets/production.yml)}
+
+#-- Provider -----------------------------------------------------------------------------------------------------------
+provider:
+  name: aws
+  stage: ${self:custom.secrets.aws.stage}
+  region: ${self:custom.secrets.aws.region}
+  profile: ${self:custom.secrets.aws.profile}
+  runtime: go1.x
+  memorySize: 128
+  timeout: 30
+  vpc:
+    subnetIds: ${self:custom.secrets.aws.vpc.subnet_ids}
+    securityGroupIds: ${self:custom.secrets.aws.vpc.security_group_ids}
+  environment:
+    STAGE: ${self:custom.secrets.aws.stage}
+    DATABASE_CONNECTION_PARAMETERS: "${self:custom.secrets.aws.rds.engine}://${self:custom.secrets.aws.rds.username}:${self:custom.secrets.aws.rds.password}@${self:custom.secrets.aws.rds.url}/${self:custom.secrets.aws.rds.name}?sslmode=${self:custom.secrets.aws.rds.ssl_mode}&timezone=UTC"
+
+#-- Functions ----------------------------------------------------------------------------------------------------------
+functions:
+
+  tasksCreate:
+    handler: build/serverless_task_create
+    package:
+      include:
+      - ./build/serverless_task_create
+    events:
+    - schedule: ${self:custom.secrets.aws.schedule.warming}
+    - http:
+        path: tasks
+        method: post
+        cors: true
+
+  tasksDelete:
+    handler: build/serverless_task_delete
+    package:
+      include:
+        - ./build/serverless_task_delete
+    events:
+      - schedule: ${self:custom.secrets.aws.schedule.warming}
+      - http:
+          path: tasks/{id}
+          method: delete
+          cors: true
+
+  tasksIndex:
+    handler: build/serverless_task_index
+    package:
+      include:
+        - ./build/serverless_task_index
+    events:
+      - schedule: ${self:custom.secrets.aws.schedule.warming}
+      - http:
+          path: tasks
+          method: get
+          cors: true
+
+  tasksMigrate:
+    handler: build/serverless_task_migrate
+    timeout: 600
+    package:
+      include:
+        - ./build/serverless_task_migrate
+        - ./pkg/services/task/migrations/*
+
+  tasksRead:
+    handler: build/serverless_task_read
+    package:
+      include:
+        - ./build/serverless_task_read
+    events:
+      - schedule: ${self:custom.secrets.aws.schedule.warming}
+      - http:
+          path: tasks/{id}
+          method: get
+          cors: true
+
+  tasksUpdate:
+    handler: build/serverless_task_update
+    package:
+      include:
+        - ./build/serverless_task_update
+    events:
+      - schedule: ${self:custom.secrets.aws.schedule.warming}
+      - http:
+          path: tasks/{id}
+          method: put
+          cors: true

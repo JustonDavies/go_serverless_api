@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS tasks;
+DROP SEQUENCE IF EXISTS tasks_id_seq;

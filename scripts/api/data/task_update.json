@@ -1,0 +1,6 @@
+{
+  "id": 1,
+  "name": "Update an existing task",
+  "details": "Here is an updated example task",
+  "resolved_at": "2019-01-01T00:00:01+00:00"
+}

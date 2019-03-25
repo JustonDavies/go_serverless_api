@@ -1,0 +1,14 @@
+#-- Git ----------
+.git
+!.gitignore
+!.keep
+
+#-- Docker ----------
+!.dockerignore
+
+#-- Editor Configs ----------
+.idea
+
+#-- Serverless ----------
+node_modules
+
