@@ -14,7 +14,7 @@ dockerfiles
 scripts
 
 #-- Secrets ----------
-secrets
+configs/secrets
 
 #-- State files ----------
 .state

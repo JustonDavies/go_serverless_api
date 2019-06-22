@@ -9,7 +9,7 @@ build
 !.keep
 
 #-- Secrets ----------
-config/secrets
+configs/secrets
 
 #-- State files ----------
 .state
