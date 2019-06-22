@@ -38,6 +38,8 @@ The project is follows the established paradigms in [golang standards project-la
 │   ├── ...
 ├── dockerfiles/
 │   ├── ...
+├── examples/
+│   ├── ...
 ├── pkg/
 │   ├── services
 │   ├── ...
@@ -52,6 +54,7 @@ The project is follows the established paradigms in [golang standards project-la
 * `cmd/` A collection of `main` executables (and closely coupled helpers), each representing one endpoint
 * `configs/` Configuration files, templates, secrets and default configs
 * `dockerfiles/` Docker files describing build and run containers
+* `examples/` Examples scripts to be used to demo or test the API manually
 * `pkg/` Library code that's ok to use by external applications
 * `scripts/` Scripts to perform various build, deploy and test a deployed collection of endpoints
 
