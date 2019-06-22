@@ -1,0 +1,33 @@
+#-- Build base image ---------------------------------------------------------------------------------------------------
+FROM golang:1.12.5-alpine AS provisioning_environment_tools
+
+# Use unicode
+ENV LANG=C.UTF-8
+
+# Download Git, Bash and OpenSSH
+RUN apk add --update git bash openssh
+
+# Set environment
+ENV TERRAFORM_VERSION=0.12.0
+ENV TF_DEV=true
+ENV TF_RELEASE=true
+
+# Download/Build Terraform
+WORKDIR $GOPATH/src/github.com/hashicorp/terraform
+RUN git clone https://github.com/hashicorp/terraform.git ./ && \
+    git checkout v${TERRAFORM_VERSION} && \
+    /bin/bash scripts/build.sh
+
+#-- Build container ----------------------------------------------------------------------------------------------------
+FROM provisioning_environment_tools AS provisioning_context
+
+# Set working directory
+ARG WORKING_DIRECTORY=$GOPATH/src/project
+WORKDIR ${WORKING_DIRECTORY}
+
+# Copy project code
+COPY ./ ./
+
+# Initialize terraform
+RUN terraform init
+RUN terraform workspace select default

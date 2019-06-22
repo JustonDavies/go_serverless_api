@@ -1,5 +1,5 @@
 #-- Build base image ---------------------------------------------------------------------------------------------------
-FROM node:10.15.3 AS deploy_base
+FROM node:10.15.3 AS deployment_tools
 
 # Set timezone to UTC by default
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
@@ -9,16 +9,22 @@ RUN locale-gen C.UTF-8 || true
 ENV LANG=C.UTF-8
 
 # Set working directory
-WORKDIR /go/src/github.com/justondavies/go_serverless_api/
+ARG WORKING_DIRECTORY=$GOPATH/src/project
+WORKDIR ${WORKING_DIRECTORY}
 
 # Download Serverless.js
 RUN npm install --global serverless
 
 #-- Build container ----------------------------------------------------------------------------------------------------
-FROM deploy_base AS deploy
+FROM deployment_tools AS deployment_context
+
+# Set working directory
+ARG WORKING_DIRECTORY=$GOPATH/src/project
+WORKDIR ${WORKING_DIRECTORY}
 
 # Copy project code
 COPY ./ ./
 
 # Deploy
-RUN serverless deploy
+#RUN serverless deploy
+CMD /bin/bash

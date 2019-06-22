@@ -1,25 +1,15 @@
-#-- Git ----------
-.git
-!.gitignore
-!.keep
-
-#-- Docker ----------
-!.dockerignore
+#-- Build / Output directories ----------
+build
 
 #-- Editor Configs ----------
 .idea
 
-#-- Build / Output directories ----------
-build
-
-#-- Serverless ----------
-node_modules
-.serverless
-
-#-- Terraform ----------
-.terraform
-terraform.tfstate.d
+#-- Git ----------
+!.gitignore
+!.keep
 
 #-- Secrets ----------
-secrets
-!secrets/.keep
+config/secrets
+
+#-- State files ----------
+.state

@@ -3,13 +3,12 @@
 project_owner="justondavies"
 project_name="go_serverless_api"
 
-process="deploy"
+process="provision"
 
-build_directory="build"
 secrets_directory="configs/secrets"
 
 state_directory=".state"
-tool_state_directory=".serverless"
+tool_state_directory="terraform.tfstate.d"
 
 #-- Begin ----------
 echo "Preparing ${process} shell for ${project_owner}/${project_name}"
@@ -19,7 +18,7 @@ version=`date +%d_%m_%y_%H_%M_%S`
 mkdir -p ${state_directory}/backup/${version}_${process}
 cp -r ${state_directory}/${tool_state_directory} ${state_directory}/backup/${version}_${process}/${tool_state_directory}
 
-#-- Create image with deployment tools ----------
+#-- Create image with process tools ----------
 image_tag="${project_owner}/${project_name}:${process}_context"
 working_directory="/${process}/${project_owner}/${project_name}"
 sudo docker build                                                                           \
@@ -29,7 +28,7 @@ sudo docker build                                                               
   --build-arg WORKING_DIRECTORY=${working_directory}                                        \
   ./
 
-#-- Create container with deployment context ----------
+#-- Create container with process context ----------
 container_name="${project_owner}_${project_name}_ephemeral_${process}_context"
 sudo docker run                                                                             \
   --name ${container_name}                                                                  \

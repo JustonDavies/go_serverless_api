@@ -14,14 +14,21 @@ NOTE: No code generation or templates were leveraged in this project. All ~6,000
 Development
 ===========
 
-This project is developed using Docker, Terraform and Serverless.js
+This project is developed using Docker ( and by extension Terraform and Serverless.js ) 
  
-The project assumes you have these services installed and that you have basic understanding of how to run these tools locally.
+The project assumes you have a basic understanding of how to run these tools but provides a small set of scripts to help setup runtime environments and version states securely.
 
 ### Project Structure
 The project is follows the established paradigms in [golang standards project-layout](https://github.com/golang-standards/project-layout) project and is broken down into the following directory structure:
 
 ```
+├── .state/
+│   ├── .serverless
+│   ├── terraform.tfstate.d
+│   ├── backup
+│   │   ├── ...
+├── build/
+│   ├── ...
 ├── cmd/
 │   ├── shared
 │   ├── endpoint
@@ -40,7 +47,8 @@ The project is follows the established paradigms in [golang standards project-la
 ...
 ```
 
-
+* `.state/` A directory which helps Terraform and Serverless maintain a versioned and secure state
+* `build/` A directory used to store a collection of compiled executables
 * `cmd/` A collection of `main` executables (and closely coupled helpers), each representing one endpoint
 * `configs/` Configuration files, templates, secrets and default configs
 * `dockerfiles/` Docker files describing build and run containers
@@ -55,7 +63,7 @@ The project is follows the established paradigms in [golang standards project-la
 
 Build
 ===========
-To build binaries for all supported endpoints:
+To build binaries for all supported endpoints just run the docker-based script below:
 
 ```
     $ scripts/build.sh
@@ -63,7 +71,7 @@ To build binaries for all supported endpoints:
 
 Provision
 ===========
-To build out managed infrastructure for all supported endpoints: (NOTE: This will be rolled into a docker script later)
+To build out managed infrastructure for all supported endpoints you just need to run the docker-based `./scripts/provision.sh` script and then run the following commands:
 
 ```
     $ terraform init
@@ -83,7 +91,7 @@ The following `best practices` are also highly recommended:
 
 Deploy
 ===========
-To deploy the application (after building) for all supported endpoints: (NOTE: This will be rolled into a docker script later)
+To deploy the application (after building) for all supported endpoints you just need to run the docker-based `./scripts/provision.sh` script and then run the following commands:
 
 ```
     $ serverless deploy

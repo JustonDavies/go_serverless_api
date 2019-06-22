@@ -12,7 +12,6 @@ server=`cat scripts/api/_configuration.json | jq -r '.api_url'`
 input=@./scripts/api/data/task_index.json
 
 #-- Pre-conditions -----------------------------------------------------------------------------------------------------
-rm -f $output
 
 #-- Action -------------------------------------------------------------------------------------------------------------
 curl -X $method                                      \

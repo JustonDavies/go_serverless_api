@@ -1,14 +1,21 @@
-#-- Git ----------
-.git
-!.gitignore
-!.keep
-
 #-- Docker ----------
+dockerfiles
 !.dockerignore
 
 #-- Editor Configs ----------
 .idea
 
-#-- Serverless ----------
-node_modules
+#-- Git ----------
+.git
+!.gitignore
+!.keep
+
+#-- Scripts ----------
+scripts
+
+#-- Secrets ----------
+secrets
+
+#-- State files ----------
+.state
 

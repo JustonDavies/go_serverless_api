@@ -4,16 +4,16 @@
 variable aws_region {}
 variable aws_profile {}
 provider "aws" {
-  region     = "${var.aws_region}"
-  version    = "1.50"
+  version    = "2.7"
 
+  region  = "${var.aws_region}"
   profile = "${var.aws_profile}"
 }
 
 //-- Shared Internal Infrastructure ------------------------------------------------------------------------------------
 module "shared_internal_vpc" {
   source = "terraform-aws-modules/vpc/aws"
-  version = "1.46.0"
+  version = "~> v2.0"
 
   name = "shared-internal-vpc"
   cidr = "10.0.0.0/16"

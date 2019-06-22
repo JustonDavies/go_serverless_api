@@ -1,15 +1,15 @@
 #-- Build base image ---------------------------------------------------------------------------------------------------
-FROM golang:1.12.1 AS build_base
-
-# Set timezone to UTC by default
-RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
+FROM golang:1.12.5-alpine AS build_environment
 
 # Use unicode
-RUN locale-gen C.UTF-8 || true
 ENV LANG=C.UTF-8
 
+# Download Git, Bash and OpenSSH
+RUN apk add --update git bash openssh make
+
 # Set working directory
-WORKDIR /go/src/github.com/justondavies/go_serverless_api/
+ARG BUILD_DIRECTORY=$GOPATH/src/project
+WORKDIR ${BUILD_DIRECTORY}
 
 # Download go modules
 ENV GO111MODULE=on
@@ -20,18 +20,14 @@ COPY go.sum ./
 RUN go mod tidy
 
 #-- Build container ----------------------------------------------------------------------------------------------------
-FROM build_base AS build
+FROM build_environment AS build_context
+
+# Set working directory
+ARG WORKING_DIRECTORY=$GOPATH/src/project
+WORKDIR ${WORKING_DIRECTORY}
 
 # Copy project code
 COPY ./ ./
 
-# Clean build directory
-RUN rm -rf ./build/*
-
-# Build artifact
-RUN GOOS=linux go build -ldflags '-s -w' -o build/serverless_task_create  cmd/task/create/create.go
-RUN GOOS=linux go build -ldflags '-s -w' -o build/serverless_task_delete  cmd/task/delete/delete.go
-RUN GOOS=linux go build -ldflags '-s -w' -o build/serverless_task_index   cmd/task/index/index.go
-RUN GOOS=linux go build -ldflags '-s -w' -o build/serverless_task_migrate cmd/task/migrate/migrate.go
-RUN GOOS=linux go build -ldflags '-s -w' -o build/serverless_task_read    cmd/task/read/read.go
-RUN GOOS=linux go build -ldflags '-s -w' -o build/serverless_task_update  cmd/task/update/update.go
+# Build artifacts
+CMD make --always-make
