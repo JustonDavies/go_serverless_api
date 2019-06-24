@@ -1,15 +1,19 @@
 #-- Build base image ---------------------------------------------------------------------------------------------------
-FROM golang:1.12.5-alpine AS build_environment
+FROM golang:1.12.5 AS build_environment
+
+# Set timezone to UTC by default
+RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 # Use unicode
 ENV LANG=C.UTF-8
 
-# Download Git, Bash and OpenSSH
-RUN apk add --update git bash openssh make
+# Install tools
+RUN apt-get update
+RUN apt-get install --silent --yes git make
 
 # Set working directory
-ARG BUILD_DIRECTORY=$GOPATH/src/project
-WORKDIR ${BUILD_DIRECTORY}
+ARG WORKING_DIRECTORY=$GOPATH/src/project
+WORKDIR ${WORKING_DIRECTORY}
 
 # Download go modules
 ENV GO111MODULE=on

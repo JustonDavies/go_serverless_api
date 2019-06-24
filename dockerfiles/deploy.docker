@@ -5,8 +5,11 @@ FROM node:10.15.3 AS deployment_tools
 RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
 # Use unicode
-RUN locale-gen C.UTF-8 || true
 ENV LANG=C.UTF-8
+
+# Install tools
+RUN apt-get update
+RUN apt-get install --silent --yes jq
 
 # Set working directory
 ARG WORKING_DIRECTORY=$GOPATH/src/project
